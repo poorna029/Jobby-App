@@ -7,6 +7,7 @@ import {
   Description,
   Button,
   LinkComponent,
+  Total,
 } from './styledComponents'
 import Header from '../Header'
 
@@ -16,7 +17,7 @@ const Home = () => {
   }
 
   return (
-    <>
+    <Total>
       <Header />
       <HomeContainer>
         <Title>Find The Job That Fits Your Life</Title>
@@ -28,7 +29,7 @@ const Home = () => {
           <Button>Find Jobs</Button>
         </LinkComponent>
       </HomeContainer>
-    </>
+    </Total>
   )
 }
 export default Home

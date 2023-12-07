@@ -31,6 +31,7 @@ import {
   ButtonContainer,
   LoaderComponent,
   RoleHeading,
+  LinkComponent,
 } from './styledComponents'
 
 const Job = ({jobsData}) => {
@@ -46,37 +47,39 @@ const Job = ({jobsData}) => {
     name,
   } = jobsData
   return (
-    <ResultContainer>
-      <CompanyRoleContainer>
-        <Img src={companyLogoUrl} alt="company logo" />
-        <RoleContainer>
-          <RoleHeading>{title}</RoleHeading>
-          <RatingContainer>
-            <RiStarFill
-              style={{color: 'yellow', marginRight: '10px'}}
-              size={18}
-            />
-            <Description>{rating}</Description>
-          </RatingContainer>
-        </RoleContainer>
-      </CompanyRoleContainer>
-      <LocationPackageContainer>
-        <LocationInterContainer>
-          <LocationContainer>
-            <MdLocationOn style={{color: 'white'}} size={30} />
-            <Description>{location}</Description>
-          </LocationContainer>
-          <LocationContainer>
-            <BsFillBriefcaseFill style={{color: 'white'}} size={25} />
-            <Description>{employmentType}</Description>
-          </LocationContainer>
-        </LocationInterContainer>
-        <Heading>{packagePerAnnum}</Heading>
-      </LocationPackageContainer>
-      <HRN />
-      <Heading>Description</Heading>
-      <Description>{jobDescription}</Description>
-    </ResultContainer>
+    <LinkComponent to={`/jobItemDetails/${id}`}>
+      <ResultContainer>
+        <CompanyRoleContainer>
+          <Img src={companyLogoUrl} alt="company logo" />
+          <RoleContainer>
+            <RoleHeading>{title}</RoleHeading>
+            <RatingContainer>
+              <RiStarFill
+                style={{color: 'yellow', marginRight: '10px'}}
+                size={18}
+              />
+              <Description>{rating}</Description>
+            </RatingContainer>
+          </RoleContainer>
+        </CompanyRoleContainer>
+        <LocationPackageContainer>
+          <LocationInterContainer>
+            <LocationContainer>
+              <MdLocationOn style={{color: 'white'}} size={30} />
+              <Description>{location}</Description>
+            </LocationContainer>
+            <LocationContainer>
+              <BsFillBriefcaseFill style={{color: 'white'}} size={25} />
+              <Description>{employmentType}</Description>
+            </LocationContainer>
+          </LocationInterContainer>
+          <Heading>{packagePerAnnum}</Heading>
+        </LocationPackageContainer>
+        <HRN />
+        <Heading>Description</Heading>
+        <Description>{jobDescription}</Description>
+      </ResultContainer>
+    </LinkComponent>
   )
 }
 export default Job

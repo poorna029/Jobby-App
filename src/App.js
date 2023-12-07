@@ -3,6 +3,7 @@ import {Route, Switch} from 'react-router-dom'
 import Login from './Login'
 import Home from './Home'
 import Jobs from './Jobs'
+import JobItemDetails from './JobItemDetails'
 
 import './App.css'
 
@@ -52,6 +53,7 @@ const App = () => (
       <Route exact path="/" component={Home} />
       <Route exact path="/login" component={Login} />
       <Route exact path="/jobs" component={Jobs} />
+      <Route exact path="/jobItemDetails/:id" component={JobItemDetails} />
     </Switch>
     <Login />
   </>

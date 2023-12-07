@@ -33,6 +33,12 @@ export const Description = styled.p`
   min-width: auto;
   line-height: 1.8rem;
 `
+export const Description1 = styled.p`
+  color: white;
+  width: 100%;
+  line-height: 1.8rem;
+`
+
 export const JobSearch = styled.div`
   width: 74vw;
   padding: auto;
@@ -76,6 +82,16 @@ export const HRN = styled.hr`
   background-color: #475569;
   border: none;
 `
+
+export const HRSimilar = styled.hr`
+  width: 100%;
+  margin: -35px 0px 10px;
+
+  height: 0.5px;
+  background-color: #475569;
+  border: none;
+`
+
 export const ProfileContainer = styled.div`
   background-image: url('https://assets.ccbp.in/frontend/react-js/profile-bg.png');
   width: 90%;
@@ -128,27 +144,73 @@ export const Img = styled.img`
   display: block;
   padding: 20px 0px;
 `
+export const Img1 = styled.img`
+  width: 100px;
+  //   height: 100%;
+  display: block;
+  padding: 20px 0px;
+`
 export const ColumnContainer = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 10px 20px;
+  //   padding: 10px 20px;
+  padding-bottom: 40px;
+  background-color: black;
+  align-items: center;
+  height: auto;
+  width: 100%;
 `
 export const ResultsContainer = styled.div`
   width: 100%;
   margin: 0px;
   display: flex;
   flex-direction: column;
-  background-color: transparent;
+  align-items: center;
+  background-color: black;
+  padding-top: 0px;
+  height: auto;
+  padding-bottom: 80px;
 `
 export const ResultContainer = styled.div`
-  width: 100%;
+  width: 90%;
+  padding: 30px 100px 0px;
+  margin: 50px 100px 0px;
   display: flex;
   flex-direction: column;
   background-color: #272727;
   border-radius: 5px;
-  margin: 10px 0px;
-  padding: 25px;
+  //   margin: 10px 0px;
+  padding-left: 25px;
+  //   align-items: center;
+  //   justify-content: center;
 `
+
+export const SimilarJobContainer = styled.div`
+  width: 90%;
+  padding: 30px 100px 0px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  background-color: #272727;
+  border-radius: 5px;
+  //   margin: 10px 0px;
+  padding: 15px;
+  //   align-items: center;
+  //   justify-content: center;
+`
+
+export const SimilarJobsContainer = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  background-color: black;
+  border-radius: 5px;
+  //   margin: 10px 0px;
+  padding: 25px;
+  //   align-items: center;
+  //   justify-content: center;
+`
+
 export const CompanyRoleContainer = styled.div`
   width: 200px;
   display: flex;
@@ -186,9 +248,35 @@ export const LocationContainer = styled.div`
   align-self: flex-start;
   align-items: center;
   flex-shrink: 1;
+  flex-wrap: wrap;
   gap: 15px;
   margin-right: 20px;
 `
+
+export const SkillContainer = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-self: flex-start;
+  align-items: center;
+  flex-shrink: 1;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-right: 20px;
+`
+
+export const LocationContainer1 = styled.div`
+  width: calc(90% / 3);
+  display: flex;
+  flex-direction: row;
+  align-self: flex-start;
+  align-items: center;
+  flex-grow: 1;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-right: auto; ;
+`
+
 export const LocationInterContainer = styled.div`
   width: 90%;
   display: flex;
@@ -201,4 +289,37 @@ export const LocationInterContainer = styled.div`
 export const LinkComponent = styled(Link)`
   text-decoration: none;
   color: white;
+`
+
+export const LinkComponent1 = styled(Link)`
+  text-decoration: none;
+  color: white;
+  //   width: calc(90% / 3);
+  //   padding: 30px 100px 0px;
+  margin: 0px;
+  margin-left: 50px;
+  display: flex;
+  flex-direction: column;
+  background-color: #272727;
+  border-radius: 5px;
+  //   margin: 10px 0px;
+  //   padding-left: 25px;
+`
+export const RowSpBwComponent = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  height: 20px;
+  margin-bottom: 20px;
+`
+export const SimilarJobHeading = styled.h1`
+  width: 90%;
+  padding: 30px 0px 0px;
+  margin: -50px 100px 0px;
+  display: flex;
+  flex-direction: column;
+  background-color: black;
+  color: white;
+  font-weight: 600;
 `
