@@ -32,6 +32,7 @@ export const Description = styled.p`
   color: white;
   min-width: auto;
   line-height: 1.8rem;
+  text-align: justify;
 `
 export const JobSearch = styled.div`
   width: 74vw;
@@ -201,4 +202,9 @@ export const LocationInterContainer = styled.div`
 export const LinkComponent = styled(Link)`
   text-decoration: none;
   color: white;
+`
+export const LiComponent = styled.li`
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
 `

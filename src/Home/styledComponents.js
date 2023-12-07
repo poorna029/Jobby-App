@@ -9,7 +9,8 @@ export const HomeContainer = styled.div`
   background-image: url('https://assets.ccbp.in/frontend/react-js/home-lg-bg.png');
   background-size: cover;
   //   background-position: 75% 28%;
-  height: 90vh;
+  min-height: 90vh;
+  max-height: auto;
   background-position: 76% 37%;
   margin-top: 0px;
   padding-bottom: 0px;
@@ -22,7 +23,8 @@ export const HomeContainer = styled.div`
 
   @media screen and (max-width: 576px) {
     background-image: url('https://assets.ccbp.in/frontend/react-js/home-sm-bg.png');
-    height: 90vh;
+    min-height: 90vh;
+    max-height: auto;
     background-position: 90% 50%;
   }
   //   @media screen and (min-height:750px and max-width:576px;){

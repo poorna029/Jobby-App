@@ -12,7 +12,7 @@ import {
 } from './styledComponents'
 
 class Login extends Component {
-  state = {username: '', password: ''}
+  state = {username: '', password: '', status: 'initial'}
 
   //   componentDidMount() {
   //     this.loginHandler()
@@ -24,18 +24,23 @@ class Login extends Component {
     history.replace('/')
   }
 
-  handleFailure = () => {}
+  handleFailure = () => {
+    this.setState(p => ({...p, status: 'fail'}))
+  }
 
   loginHandler = async () => {
+    const {username, password} = this.state
+    const newObj = {username, password}
     const options = {
       method: 'POST',
-      body: JSON.stringify(this.state),
+      body: JSON.stringify(newObj),
     }
 
     const res = await fetch('https://apis.ccbp.in/login', options)
     const data = await res.json()
     console.log(res)
     if (res.ok) {
+      this.setState(pre => ({...pre, status: 'success'}))
       this.handleSuccess(data.jwt_token)
     } else {
       this.handleFailure()
@@ -67,6 +72,7 @@ class Login extends Component {
     if (Cookies.get('jwt')) {
       return <Redirect to="/" />
     }
+    const {status} = this.state
     return (
       <LoginContainer>
         <LoginForm>
@@ -86,8 +92,12 @@ class Login extends Component {
             type="password"
             onKeyUp={this.handlePassword}
           />
-          <Button onClick={this.loginHandler}>Login</Button>
-          {false ? <P>*Username and Password didn't match</P> : null}
+          <Button type="submit" onClick={this.loginHandler}>
+            Login
+          </Button>
+          {status !== 'success' ? (
+            <P>*Username and Password didn't match</P>
+          ) : null}
         </LoginForm>
       </LoginContainer>
     )

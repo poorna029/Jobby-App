@@ -32,6 +32,7 @@ import {
   LoaderComponent,
   RoleHeading,
   LinkComponent,
+  LiComponent,
 } from './styledComponents'
 
 const Job = ({jobsData}) => {
@@ -47,7 +48,7 @@ const Job = ({jobsData}) => {
     name,
   } = jobsData
   return (
-    <LinkComponent to={`/jobItemDetails/${id}`}>
+    <LinkComponent to={`/jobs/${id}`}>
       <ResultContainer>
         <CompanyRoleContainer>
           <Img src={companyLogoUrl} alt="company logo" />

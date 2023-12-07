@@ -21,7 +21,7 @@ export const FilterComponent = styled.div`
 `
 export const RoleHeading = styled.h3`
   color: #cbd5e1;
-  min-width: 600px;
+  width: auto;
   margin-left: 30px;
 `
 
@@ -32,11 +32,13 @@ export const Description = styled.p`
   color: white;
   min-width: auto;
   line-height: 1.8rem;
+  text-align: justify;
 `
 export const Description1 = styled.p`
   color: white;
   width: 100%;
   line-height: 1.8rem;
+  text-align: justify;
 `
 
 export const JobSearch = styled.div`
@@ -137,6 +139,7 @@ export const LoaderComponent = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
+  height: 100vh;
 `
 export const Img = styled.img`
   width: 100px;
@@ -150,6 +153,10 @@ export const Img1 = styled.img`
   display: block;
   padding: 20px 0px;
 `
+export const FailureImg = styled.img`
+  width: 50vw;
+  margin: auto;
+`
 export const ColumnContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -159,6 +166,11 @@ export const ColumnContainer = styled.div`
   align-items: center;
   height: auto;
   width: 100%;
+`
+export const JobItemDetailsContainer = styled.li`
+  width: 100%;
+  height: auto;
+  list-style: none;
 `
 export const ResultsContainer = styled.div`
   width: 100%;
@@ -186,7 +198,7 @@ export const ResultContainer = styled.div`
 `
 
 export const SimilarJobContainer = styled.div`
-  width: 90%;
+  width: 100%;
   padding: 30px 100px 0px;
   margin: auto;
   display: flex;
@@ -199,7 +211,7 @@ export const SimilarJobContainer = styled.div`
   //   justify-content: center;
 `
 
-export const SimilarJobsContainer = styled.div`
+export const SimilarJobsContainer = styled.ul`
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -209,10 +221,14 @@ export const SimilarJobsContainer = styled.div`
   padding: 25px;
   //   align-items: center;
   //   justify-content: center;
+  box-sizing: border-box;
+  overflow: none;
+  height: auto;
+  list-style: none;
 `
 
 export const CompanyRoleContainer = styled.div`
-  width: 200px;
+  width: auto;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -220,7 +236,7 @@ export const CompanyRoleContainer = styled.div`
   padding-right: 20px;
 `
 export const RoleContainer = styled.div`
-  width: 100%;
+  width: auto;
   display: flex;
   flex-direction: column;
 `
@@ -253,7 +269,7 @@ export const LocationContainer = styled.div`
   margin-right: 20px;
 `
 
-export const SkillContainer = styled.div`
+export const SkillContainer = styled.ul`
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -263,9 +279,10 @@ export const SkillContainer = styled.div`
   flex-wrap: wrap;
   gap: 15px;
   margin-right: 20px;
+  list-style: none;
 `
 
-export const LocationContainer1 = styled.div`
+export const LocationContainer1 = styled.li`
   width: calc(90% / 3);
   display: flex;
   flex-direction: row;
@@ -302,8 +319,10 @@ export const LinkComponent1 = styled(Link)`
   flex-direction: column;
   background-color: #272727;
   border-radius: 5px;
+  list-style: none;
   //   margin: 10px 0px;
   //   padding-left: 25px;
+  //   overflow: clip;
 `
 export const RowSpBwComponent = styled.div`
   display: flex;
@@ -314,7 +333,7 @@ export const RowSpBwComponent = styled.div`
   margin-bottom: 20px;
 `
 export const SimilarJobHeading = styled.h1`
-  width: 90%;
+  width: auto;
   padding: 30px 0px 0px;
   margin: -50px 100px 0px;
   display: flex;

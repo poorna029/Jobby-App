@@ -34,6 +34,8 @@ import {
   FailedProfileContainer,
   ButtonContainer,
   LoaderComponent,
+  FailureImg,
+  LoaderComponent1,
 } from './styledComponents'
 import InputComponent from '../InputComponent'
 
@@ -45,6 +47,7 @@ const ProfileFetchStatus = {
   initial: 'INITIAL',
   loading: 'LOADING',
   success: 'SUCCESS',
+  failure: 'FAILURE',
 }
 
 const JobsFetchStatus = {...ProfileFetchStatus}
@@ -52,7 +55,7 @@ const JobsFetchStatus = {...ProfileFetchStatus}
 class Jobs extends Component {
   state = {
     profileData: {},
-    profileFetchStatus: ProfileContainer.initial,
+    profileFetchStatus: ProfileFetchStatus.initial,
     profileErr: '',
     jobsData: [],
     jobsFetchStatus: JobsFetchStatus.initial,
@@ -67,10 +70,16 @@ class Jobs extends Component {
   }
 
   handleReset = () => {
+    const arr = ['FT', 'PT', 'F', 'I', '10', '20', '30', '40']
+    arr.forEach(ele => {
+      const s = document.getElementById(ele)
+      s.checked = false
+    })
+
     this.setState(
       p => ({
         profileData: {},
-        profileFetchStatus: ProfileContainer.initial,
+        profileFetchStatus: ProfileFetchStatus.initial,
         profileErr: '',
         jobsData: [],
         jobsFetchStatus: JobsFetchStatus.initial,
@@ -84,7 +93,6 @@ class Jobs extends Component {
 
   handleFT = e => {
     const {minPackage, jobType, searchKeyWord} = this.state
-    console.log('ft')
 
     const val = e.target.value
     let newArr = []
@@ -110,13 +118,11 @@ class Jobs extends Component {
     } else {
       newArr = jobType.filter(jt => jt !== x)
     }
-    console.log(newArr)
 
     this.setState(p => ({...p, jobType: newArr}), this.handleSearchButton)
   }
 
   handleSalary = e => {
-    console.log(e.target.value)
     let x = 0
     switch (e.target.value) {
       case '10LPA and above':
@@ -147,7 +153,6 @@ class Jobs extends Component {
       jobsFetchStatus: JobsFetchStatus.loading,
     }))
     const token = Cookies.get('jwt')
-    console.log('Token', token)
     const options = {
       method: 'GET',
       headers: {
@@ -156,9 +161,6 @@ class Jobs extends Component {
         Authorization: `Bearer ${token}`,
       },
     }
-    console.log(
-      `https://apis.ccbp.in/jobs?employment_type=${empType}&minimum_package=${minPackage}&search=${searchKeyWord}`,
-    )
 
     const res = await fetch(
       `https://apis.ccbp.in/jobs?employment_type=${empType}&minimum_package=${minPackage}&search=${searchKeyWord}`,
@@ -166,7 +168,6 @@ class Jobs extends Component {
     )
     const data = await res.json()
     const {jobs} = data
-    // console.log('Jobs', data, jobs)
     const jobsData = jobs.map(e => {
       const {
         company_logo_url: companyLogoUrl,
@@ -192,7 +193,6 @@ class Jobs extends Component {
     })
     if (res.ok) {
       this.jobsFetchSuccess(jobsData)
-      console.log('jobsData', jobsData)
     } else {
       this.jobsFetchFailure(res.error_msg)
     }
@@ -203,27 +203,7 @@ class Jobs extends Component {
     this.filteredFetch(minPackage, jobType, searchKeyWord)
   }
 
-  //   handlePT = e => {
-  //     if (e.target.checked) {
-  //       this.setState(p => ({...p, jobType: [...p.jobType, e.target.value]}))
-  //     }
-  //   }
-
-  //   handleInternship = e => {
-  //     if (e.target.checked) {
-  //       this.setState(p => ({...p, jobType: [...p.jobType, e.target.value]}))
-  //     }
-  //   }
-
-  //   handleFreelance = e => {
-  //     if (e.target.checked) {
-  //       this.setState(p => ({...p, jobType: [...p.jobType, e.target.value]}))
-  //     }
-  //   }
-
   handleSearchInput = e => {
-    // this.setState(state => ({...state, searchKeyWord: e.target.value}))
-
     const {jobsData} = this.state
     this.setState(p => ({
       ...p,
@@ -246,9 +226,7 @@ class Jobs extends Component {
     }))
   }
 
-  //   renderSuccessJobsView=()
-
-  renderJobsView = a => {
+  renderJobsStatusView = a => {
     switch (a) {
       case JobsFetchStatus.success:
         return this.renderSuccessJobsView()
@@ -261,161 +239,52 @@ class Jobs extends Component {
     }
   }
 
-  fetchJobs = async () => {
-    this.setState(j => ({
-      ...j,
-      jobsFetchStatus: JobsFetchStatus.loading,
-    }))
-    const token = Cookies.get('jwt')
-    console.log('Token', token)
-    const options = {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    }
-
-    const res = await fetch('https://apis.ccbp.in/jobs', options)
-    const data = await res.json()
-    const {jobs} = data
-    console.log('Jobs', data, jobs)
-    const jobsData = jobs.map(e => {
-      const {
-        company_logo_url: companyLogoUrl,
-        employment_type: employmentType,
-
-        id,
-        job_description: jobDescription,
-        location,
-        package_per_annum: packagePerAnnum,
-        rating,
-        title,
-      } = e
-      return {
-        companyLogoUrl,
-        employmentType,
-        id,
-        jobDescription,
-        location,
-        packagePerAnnum,
-        rating,
-        title,
-      }
-    })
-    if (res.ok) {
-      this.jobsFetchSuccess(jobsData)
-      console.log('jobsData', jobsData)
-    } else {
-      this.jobsFetchFailure(res.error_msg)
-    }
-  }
-
-  renderProfileView = a => {
-    switch (a) {
-      case ProfileFetchStatus.success:
-        return this.renderSuccessProfileView()
-      case ProfileFetchStatus.failure:
-        return this.renderFailureProfileView()
-      case ProfileFetchStatus.loading:
-        return this.renderProfileLoadingView()
-      default:
-        return null
-    }
-  }
-
-  renderSuccessProfileView = () => {
-    const {profileData} = this.state
-
-    const {profileImg, shortBio, name} = profileData
+  renderSuccessJobsView = () => {
+    const {jobsData} = this.state
     return (
-      <ProfileContainer>
-        <Img src={profileImg} alt="profile" />
-        <Heading style={profileHeading}>{name}</Heading>
-        <Description style={profileDescription}>{shortBio}</Description>
-      </ProfileContainer>
+      <ResultsContainer>
+        <ul style={{listStyle: 'none'}}>
+          {jobsData.map(jobData => (
+            <li key={jobData.id}>
+              <Job jobsData={jobData} />
+            </li>
+          ))}
+        </ul>
+      </ResultsContainer>
     )
   }
 
-  renderFailureProfileView = () => (
-    <FailedProfileContainer>
-      <ButtonContainer onClick={this.fetchProfileDetails()}>
-        Retry
-      </ButtonContainer>
-    </FailedProfileContainer>
+  renderFailureJobsView = () => (
+    <ColumnContainer>
+      <FailureImg
+        src="https://assets.ccbp.in/frontend/react-js/failure-img.png"
+        alt="failure view"
+      />
+      <Heading>Oops! Something Went Wrong</Heading>
+      <Description>
+        We Cannot Seem to find the page you are looking for{' '}
+      </Description>
+      <ButtonContainer>Retry</ButtonContainer>
+    </ColumnContainer>
   )
 
-  renderProfileLoadingView = () => (
-    <LoaderComponent className="loader-container" data-testid="loader">
-      <Loader type="ThreeDots" color="#ffffff" height="50" width="50" />
-    </LoaderComponent>
-  )
-
-  fetchProfileSuccess = result => {
-    console.log('spoorna')
-    this.setState(p => ({
-      ...p,
-      profileData: result,
-      profilFetchStatus: ProfileFetchStatus.success,
-    }))
-    //
-  }
-
-  fetchProfileFailure = errorMsg => {
-    console.log('fpoorna')
-  }
-
-  fetchProfileDetails = async () => {
-    const token = Cookies.get('jwt')
-    console.log('Token', token)
-    this.setState(p => ({...p, profilFetchStatus: ProfileFetchStatus.loading}))
-    const options = {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    }
-
-    const res = await fetch('https://apis.ccbp.in/profile', options)
-    const data = await res.json()
-    const {profile_details: profileDetails} = data
-    const {
-      name,
-      profile_image_url: profileImg,
-      short_bio: shortBio,
-    } = profileDetails
-    const modifiedData = {name, profileImg, shortBio}
-    if (res.ok) {
-      this.fetchProfileSuccess(modifiedData)
-    } else {
-      this.fetchProfileFailure(res.error_msg)
-    }
-  }
-
-  render() {
+  renderJobsView = fetchStatus => {
     const {
       profileData,
-      profilFetchStatus,
+      profileFetchStatus,
       jobsData,
       searchKeyWord,
       jobType,
     } = this.state
-    // const filteredJobs = jobsData.filter(job =>
-    //   job.title.toLowerCase().includes(searchKeyWord.toLowerCase()),
-    // )
 
-    // const f = jobType.join(',')
-    // console.log(f)
+    console.log('suc', profileFetchStatus)
 
     return (
       <>
         <Header />
         <JobsContainer>
           <FilterComponent>
-            {this.renderProfileView(profilFetchStatus)}
+            {this.renderProfileView(profileFetchStatus)}
             <HR />
             <ColumnContainer>
               <ButtonContainer
@@ -491,57 +360,173 @@ class Jobs extends Component {
                 style={searchStyle}
                 onKeyUp={this.handleSearchInput}
               />
-              <FiSearch
-                color="white"
-                size={40}
-                style={searchStyle}
-                onClick={this.handleSearchButton}
-              />
+              <ButtonContainer data-testid="searchButton">
+                <FiSearch
+                  color="white"
+                  size={40}
+                  style={searchStyle}
+                  onClick={this.handleSearchButton}
+                />
+              </ButtonContainer>
             </SearchContainer>
-            <ResultsContainer>
-              {/* <ResultContainer>
-                <CompanyRoleContainer>
-                  <Img src="" alt="company logo" />
-                  <RoleContainer>
-                    <Heading>Devops Engineer</Heading>
-                    <RatingContainer>
-                      <RiStarFill
-                        style={{color: 'yellow', marginRight: '10px'}}
-                        size={18}
-                      />
-                      4
-                    </RatingContainer>
-                  </RoleContainer>
-                </CompanyRoleContainer>
-                <LocationPackageContainer>
-                  <LocationInterContainer>
-                    <LocationContainer>
-                      <MdLocationOn style={{color: 'white'}} size={30} />
-                      <Description>Delhi</Description>
-                    </LocationContainer>
-                    <LocationContainer>
-                      <BsBriefcaseFill style={{color: 'white'}} size={30} />
-                      <Description>Internship</Description>
-                    </LocationContainer>
-                  </LocationInterContainer>
-                  <Heading>10LPA</Heading>
-                </LocationPackageContainer>
-                <HRN />
-                <Heading>Description</Heading>
-                <Description>
-                  Simply import the icons you need, and add them anywhere in
-                  your render method. Phosphor supports tree-shaking, so your
-                  bundle only includes code for the icons you use.
-                </Description>
-              </ResultContainer> */}
-              {jobsData.map(jobData => (
-                <Job key={jobData.id} jobsData={jobData} />
-              ))}
-            </ResultsContainer>
+            {this.renderJobsStatusView(fetchStatus)}
           </JobSearch>
         </JobsContainer>
       </>
     )
+  }
+
+  renderJobsLoadingView = () => (
+    <LoaderComponent1>
+      <div className="loader-container" data-testid="loader">
+        <Loader type="ThreeDots" color="#fff" height="50" width="50" />
+      </div>
+    </LoaderComponent1>
+  )
+
+  fetchJobs = async () => {
+    this.setState(j => ({
+      ...j,
+      jobsFetchStatus: JobsFetchStatus.loading,
+    }))
+    const token = Cookies.get('jwt')
+    console.log('Token', token)
+    const options = {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    }
+
+    const res = await fetch('https://apis.ccbp.in/jobs', options)
+    const data = await res.json()
+    const {jobs} = data
+    console.log('Jobs', data, jobs)
+    const jobsData = jobs.map(e => {
+      const {
+        company_logo_url: companyLogoUrl,
+        employment_type: employmentType,
+
+        id,
+        job_description: jobDescription,
+        location,
+        package_per_annum: packagePerAnnum,
+        rating,
+        title,
+      } = e
+      return {
+        companyLogoUrl,
+        employmentType,
+        id,
+        jobDescription,
+        location,
+        packagePerAnnum,
+        rating,
+        title,
+      }
+    })
+    if (res.ok) {
+      this.jobsFetchSuccess(jobsData)
+      console.log('jobsData', jobsData)
+    } else {
+      this.jobsFetchFailure(res.error_msg)
+    }
+  }
+
+  renderProfileView = a => {
+    console.log('pr', a)
+    switch (a) {
+      case ProfileFetchStatus.success:
+        return this.renderSuccessProfileView()
+      case ProfileFetchStatus.failure:
+        return this.renderFailureProfileView()
+      case ProfileFetchStatus.loading:
+        return this.renderProfileLoadingView()
+      default:
+        return null
+    }
+  }
+
+  renderSuccessProfileView = () => {
+    const {profileData} = this.state
+
+    const {profileImg, shortBio, name} = profileData
+    return (
+      <ProfileContainer>
+        <Img src={profileImg} alt="profile" />
+        <Heading style={profileHeading}>{name}</Heading>
+        <Description style={profileDescription}>{shortBio}</Description>
+      </ProfileContainer>
+    )
+  }
+
+  renderFailureProfileView = () => (
+    <FailedProfileContainer>
+      <ButtonContainer onClick={this.fetchProfileDetails()}>
+        Retry
+      </ButtonContainer>
+    </FailedProfileContainer>
+  )
+
+  renderProfileLoadingView = () => (
+    <LoaderComponent className="loader-container" data-testid="loader">
+      <Loader type="ThreeDots" color="#ffffff" height="50" width="50" />
+    </LoaderComponent>
+  )
+
+  fetchProfileSuccess = result => {
+    console.log('spoorna')
+    this.setState(p => ({
+      ...p,
+      profileData: result,
+      profileFetchStatus: ProfileFetchStatus.success,
+    }))
+  }
+
+  fetchProfileFailure = errorMsg => {
+    this.setState(pre => ({
+      ...pre,
+      profileFetchStatus: ProfileFetchStatus.failure,
+    }))
+  }
+
+  fetchProfileDetails = async () => {
+    const token = Cookies.get('jwt')
+    console.log('Token', token)
+    this.setState(p => ({...p, profileFetchStatus: ProfileFetchStatus.loading}))
+    const options = {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    }
+
+    const res = await fetch('https://apis.ccbp.in/profile', options)
+    const data = await res.json()
+    console.log(res, 'check')
+    if (res.ok) {
+      const {profile_details: profileDetails} = data
+      const {
+        name,
+        profile_image_url: profileImg,
+        short_bio: shortBio,
+      } = profileDetails
+      const modifiedData = {name, profileImg, shortBio}
+      this.fetchProfileSuccess(modifiedData)
+    }
+    if (res.status_code) {
+      this.fetchProfileFailure()
+    }
+  }
+
+  render() {
+    const {jobsFetchStatus} = this.state
+    // return this.renderJobsView(jobsFetchStatus)
+    return this.renderJobsView(jobsFetchStatus)
   }
 }
 

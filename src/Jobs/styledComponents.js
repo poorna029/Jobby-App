@@ -22,6 +22,7 @@ export const Heading = styled.h3`
 `
 export const Description = styled.p`
   color: white;
+  text-align: justify;
 `
 export const JobSearch = styled.div`
   width: 70vw;
@@ -111,7 +112,19 @@ export const LoaderComponent = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
+  height: 28vh;
 `
+
+export const LoaderComponent1 = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 70vw;
+  margin-left: auto;
+  height: 80vh;
+`
+
 export const Img = styled.img`
   width: 100px;
   //   height: 100%;
@@ -130,6 +143,7 @@ export const ResultsContainer = styled.div`
   flex-direction: column;
   background-color: transparent;
   margin-left: 40px;
+  list-style: none;
 `
 export const ResultContainer = styled.div`
   width: 100%;
@@ -186,4 +200,8 @@ export const LocationInterContainer = styled.div`
   flex-direction: row;
   align-self: flex-start;
   align-items: center;
+`
+export const FailureImg = styled.img`
+  width: 50vw;
+  margin: auto;
 `

@@ -1,5 +1,5 @@
 import {Route, Switch} from 'react-router-dom'
-// import Header from './Header'
+import ProtectedRoute from './ProtectedRoute'
 import Login from './Login'
 import Home from './Home'
 import Jobs from './Jobs'
@@ -52,8 +52,8 @@ const App = () => (
     <Switch>
       <Route exact path="/" component={Home} />
       <Route exact path="/login" component={Login} />
-      <Route exact path="/jobs" component={Jobs} />
-      <Route exact path="/jobItemDetails/:id" component={JobItemDetails} />
+      <ProtectedRoute exact path="/jobs" component={Jobs} />
+      <ProtectedRoute exact path="/jobs/:id" component={JobItemDetails} />
     </Switch>
     <Login />
   </>
