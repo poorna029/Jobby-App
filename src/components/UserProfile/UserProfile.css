@@ -1,0 +1,21 @@
+.profile-name {
+  font-family: 'Roboto';
+  font-size: 14px;
+  color: #6366f1;
+}
+
+.profile-pic {
+  width: 50px;
+}
+
+.profile-description {
+  font-size: 14px;
+  font-family: 'Roboto';
+  margin-top: 5px;
+}
+
+@media screen and (min-width: 768px) {
+  .profile-name {
+    font-size: 18px;
+  }
+}
