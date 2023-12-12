@@ -32,6 +32,9 @@ export const Description = styled.p`
   min-width: auto;
   line-height: 1.8rem;
   text-align: justify;
+  @media screen and (max-width: 576px) {
+    line-height: 1.2rem;
+  }
 `
 export const JobSearch = styled.div`
   width: 74vw;
@@ -141,13 +144,17 @@ export const ResultsContainer = styled.div`
   background-color: transparent;
 `
 export const ResultContainer = styled.div`
-  width: 100%;
+  width: 90%;
   display: flex;
   flex-direction: column;
   background-color: #272727;
   border-radius: 5px;
   margin: 10px 0px;
   padding: 25px;
+  @media screen and (max-width: 576px) {
+    padding: 5px;
+    width: 100%;
+  }
 `
 export const CompanyRoleContainer = styled.div`
   width: auto;
@@ -156,6 +163,9 @@ export const CompanyRoleContainer = styled.div`
   justify-content: flex-start;
   margin-right: auto;
   padding-right: 20px;
+  @media screen and (max-width: 576px) {
+    padding-right: 3px;
+  }
 `
 export const RoleContainer = styled.div`
   width: auto;
@@ -163,7 +173,7 @@ export const RoleContainer = styled.div`
   flex-direction: column;
 `
 export const RatingContainer = styled.div`
-  width: 100%;
+  width: auto;
   display: flex;
   flex-direction: row;
   align-self: flex-start;
@@ -188,15 +198,22 @@ export const LocationContainer = styled.div`
   flex-shrink: 1;
   gap: 15px;
   margin-right: 20px;
+  padding: 5px;
 `
 export const LocationInterContainer = styled.div`
-  width: 90%;
+  width: auto;
   display: flex;
   flex-direction: row;
   align-self: flex-start;
   align-items: center;
-  height: 50px;
+  height: auto;
   margin-left: -10px;
+  @media screen and (max-width: 576px) {
+    display: flex;
+    flex-direction: column;
+    padding: 0px;
+    margin: -10px;
+  }
 `
 export const LinkComponent = styled(Link)`
   text-decoration: none;
@@ -206,4 +223,8 @@ export const LiComponent = styled.li`
   margin: 0px;
   padding: 0px;
   list-style: none;
+  max-width: 100%;
+  @media screen and (max-width: 576px) {
+    max-width: 100vw;
+  }
 `

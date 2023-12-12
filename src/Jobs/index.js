@@ -243,13 +243,9 @@ class Jobs extends Component {
     const {jobsData} = this.state
     return (
       <ResultsContainer>
-        <ul style={{listStyle: 'none'}}>
-          {jobsData.map(jobData => (
-            <li key={jobData.id}>
-              <Job jobsData={jobData} />
-            </li>
-          ))}
-        </ul>
+        {jobsData.map(jobData => (
+          <Job key={jobData.id} jobsData={jobData} />
+        ))}
       </ResultsContainer>
     )
   }

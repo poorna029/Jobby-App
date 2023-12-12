@@ -10,7 +10,8 @@ export const HeaderContainer = styled.div`
   padding: 0px 10px;
   box-sizing: border-box;
   align-items: center;
-  width: 100vw;
+  min-width: 100vw;
+  max-width: 100vw;
   margin-bottom: 0px;
   padding-bottom: 0px;
   @media screen and (max-width: 576px) {

@@ -12,10 +12,19 @@ export const JobsContainer = styled.div`
   box-sizing: border-box;
   background-color: black;
   height: auto;
+  @media screen and (max-width: 576px) {
+    display: flex;
+    flex-direction: column;
+  }
 `
 export const FilterComponent = styled.div`
   width: 24vw;
   padding: auto;
+  @media screen and (max-width: 576px) {
+    // display: flex;
+    // flex-direction: column;
+    width: 100%;
+  }
 `
 export const Heading = styled.h3`
   color: #cbd5e1;
@@ -30,6 +39,11 @@ export const JobSearch = styled.div`
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+  @media screen and (max-width: 576px) {
+    // display: flex;
+    // flex-direction: column;
+    width: 100%;
+  }
 `
 export const SearchContainer = styled.div`
   display: flex;
@@ -41,9 +55,13 @@ export const SearchContainer = styled.div`
   border: solid 1px #333;
   height: 50px;
   border-radius: 5px;
+  @media screen and (max-width: 576px) {
+    margin-left: 10px;
+    width: 80%;
+  }
 `
 export const SearchInput = styled.input`
-  width: 90%;
+  width: 100%;
   background-color: transparent;
   height: 50px;
   outline: none;
@@ -51,6 +69,11 @@ export const SearchInput = styled.input`
   font-size: 22px;
   letter-spacing: 1.1px;
   border-width: 0px;
+  @media screen and (max-width: 576px) {
+    display: flex;
+    flex-direction: column;
+    width: 300%;
+  }
 `
 export const HR = styled.hr`
   width: 90%;
@@ -136,14 +159,18 @@ export const ColumnContainer = styled.div`
   flex-direction: column;
   padding: 10px 20px;
 `
-export const ResultsContainer = styled.div`
-  width: 90%;
+export const ResultsContainer = styled.ul`
+  width: 100%;
   margin: 0px;
   display: flex;
   flex-direction: column;
   background-color: transparent;
   margin-left: 40px;
   list-style: none;
+  @media screen and (max-width: 576px) {
+    width: 100%;
+    margin-left: -40px;
+  }
 `
 export const ResultContainer = styled.div`
   width: 100%;

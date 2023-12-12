@@ -26,12 +26,19 @@ export const RoleHeading = styled.h3`
 
 export const Heading = styled.h3`
   color: #cbd5e1;
+  margin-top: 0px;
+  max-width: 100%;
 `
 export const Description = styled.p`
   color: white;
   min-width: auto;
   line-height: 1.8rem;
   text-align: justify;
+  @media screen and (max-width: 576px) {
+    display: flex;
+    flex-direction: column;
+    width: ;
+  }
 `
 export const Description1 = styled.p`
   color: white;
@@ -164,15 +171,15 @@ export const ColumnContainer = styled.div`
   background-color: black;
   align-items: center;
   height: auto;
-  width: 100%;
+  max-width: 100vw;
 `
 export const JobItemDetailsContainer = styled.li`
-  width: 100%;
+  max-width: 100%;
   height: auto;
   list-style: none;
 `
 export const ResultsContainer = styled.div`
-  width: 100%;
+  max-width: 100%;
   margin: 0px;
   display: flex;
   flex-direction: column;
@@ -224,6 +231,13 @@ export const SimilarJobsContainer = styled.ul`
   overflow: none;
   height: auto;
   list-style: none;
+  @media screen and (max-width: 576px) {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    gap: 20px;
+    min-height: 980px;
+  }
 `
 
 export const CompanyRoleContainer = styled.div`
@@ -240,7 +254,7 @@ export const RoleContainer = styled.div`
   flex-direction: column;
 `
 export const RatingContainer = styled.div`
-  width: 100%;
+  width: auto;
   display: flex;
   flex-direction: row;
   align-self: flex-start;
@@ -274,11 +288,20 @@ export const SkillContainer = styled.ul`
   flex-direction: row;
   align-self: flex-start;
   align-items: center;
-  flex-shrink: 1;
+  //   display: grid;
+  // grid-template-rows:1fr 1fr
+  flex-grow: 1;
+  //   flex-shrink: 1;
   flex-wrap: wrap;
   gap: 15px;
   margin-right: 20px;
   list-style: none;
+  @media screen and (max-width: 576px) {
+    display: flex;
+    flex-direction: row;
+    // display: grid;
+    // grid-template-columns: repeat(2, 1fr);
+  }
 `
 
 export const LocationContainer1 = styled.li`
@@ -287,10 +310,17 @@ export const LocationContainer1 = styled.li`
   flex-direction: row;
   align-self: flex-start;
   align-items: center;
+  //   display:grid;
+  //   grid-template-columns:repeat(3,1fr)
   flex-grow: 1;
   flex-wrap: wrap;
   gap: 15px;
-  margin-right: auto; ;
+  margin-right: auto;
+  @media screen and (max-width: 576px) {
+    width: calc(90% / 2);
+    display: flex;
+    flex-direction: column;
+  }
 `
 
 export const LocationInterContainer = styled.div`
@@ -322,6 +352,11 @@ export const LinkComponent1 = styled(Link)`
   //   margin: 10px 0px;
   //   padding-left: 25px;
   //   overflow: clip;
+  @media screen and (max-width: 576px) {
+    display: flex;
+    flex-direction: column;
+    margin-left: 0px;
+  }
 `
 export const RowSpBwComponent = styled.div`
   display: flex;

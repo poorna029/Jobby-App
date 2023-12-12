@@ -138,7 +138,7 @@ class JobItemDetails extends Component {
     console.log('title', title)
 
     return (
-      <JobItemDetailsContainer>
+      <Heading>
         <ColumnContainer>
           <ResultsContainer>
             <Header />
@@ -252,7 +252,7 @@ class JobItemDetails extends Component {
             ))}
           </SimilarJobsContainer>
         </ColumnContainer>
-      </JobItemDetailsContainer>
+      </Heading>
     )
   }
 

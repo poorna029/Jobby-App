@@ -36,8 +36,12 @@ class Header extends Component {
         </RouterContainer>
         <Button onClick={this.handleLogout}>Logout</Button>
         <MobileContainer>
-          <VscHome size={40} color="white" />
-          <GiSuitcase size={45} color="white" />
+          <LinkComponent to="/">
+            <VscHome size={40} color="white" />
+          </LinkComponent>
+          <LinkComponent to="/jobs">
+            <GiSuitcase size={45} color="white" />
+          </LinkComponent>
           <FiLogOut onClick={this.handleLogout} size={30} color="white" />
         </MobileContainer>
       </HeaderContainer>
