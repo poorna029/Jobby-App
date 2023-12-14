@@ -26,7 +26,6 @@ const JobItem = () => {
     JobDetails: {},
     similarJobsList: [],
     apiStatus: apiStatusConstants.initial,
-    ID: id,
   })
 
   const getFormattedData = job => ({
@@ -85,6 +84,12 @@ const JobItem = () => {
 
   useEffect(() => {
     getProductData()
+
+    return setState({
+      JobDetails: {},
+      similarJobsList: [],
+      apiStatus: apiStatusConstants.initial,
+    })
   }, [id])
 
   const renderLoadingView = () => (

@@ -157,6 +157,16 @@ const Jobs = () => {
   useEffect(() => {
     getUserDetails()
     getJobs()
+
+    return setState({
+      searchInput: '',
+      employmentType: [],
+      minimumPackage: '',
+      jobsApiStatus: apiStatusConstants.initial,
+      profileDetails: {},
+      profileApiStatus: apiStatusConstants.initial,
+      jobsList: [],
+    })
   }, [])
 
   const renderUserProfile = () => {
