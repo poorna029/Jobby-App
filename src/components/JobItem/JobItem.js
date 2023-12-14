@@ -1,4 +1,5 @@
-import {Component} from 'react'
+import {Component, useState, useEffect} from 'react'
+import {useParams} from 'react-router-dom'
 import Cookies from 'js-cookie'
 import Loader from 'react-loader-spinner'
 import {BiLinkExternal} from 'react-icons/bi'
@@ -17,18 +18,18 @@ const apiStatusConstants = {
   inProgress: 'IN_PROGRESS',
 }
 
-class JobItem extends Component {
-  state = {
+const JobItem = () => {
+  const {id} = useParams()
+  console.log(id)
+
+  const [state, setState] = useState({
     JobDetails: {},
     similarJobsList: [],
     apiStatus: apiStatusConstants.initial,
-  }
+    ID: id,
+  })
 
-  componentDidMount() {
-    this.getProductData()
-  }
-
-  getFormattedData = job => ({
+  const getFormattedData = job => ({
     companyLogoUrl: job.job_details.company_logo_url,
     companyWebsiteUrl: job.job_details.company_website_url,
     employmentType: job.job_details.employment_type,
@@ -42,7 +43,7 @@ class JobItem extends Component {
     title: job.job_details.title,
   })
 
-  getFormattedSimilarJobData = job => ({
+  const getFormattedSimilarJobData = job => ({
     companyLogoUrl: job.company_logo_url,
     employmentType: job.employment_type,
     id: job.id,
@@ -52,14 +53,8 @@ class JobItem extends Component {
     title: job.title,
   })
 
-  getProductData = async () => {
-    const {match} = this.props
-    const {params} = match
-    const {id} = params
-
-    this.setState({
-      apiStatus: apiStatusConstants.inProgress,
-    })
+  const getProductData = async () => {
+    setState(pre => ({...pre, apiStatus: apiStatusConstants.inProgress}))
     const jwtToken = Cookies.get('jwt_token')
     const apiUrl = `https://apis.ccbp.in/jobs/${id}`
     const options = {
@@ -71,35 +66,38 @@ class JobItem extends Component {
     const response = await fetch(apiUrl, options)
     if (response.ok) {
       const fetchedData = await response.json()
-      const updatedData = await this.getFormattedData(fetchedData)
+      const updatedData = await getFormattedData(fetchedData)
       const updatedSimilarJobsData = await fetchedData.similar_jobs
       const modifiedSimilarJobsData = updatedSimilarJobsData.map(eachData =>
-        this.getFormattedSimilarJobData(eachData),
+        getFormattedSimilarJobData(eachData),
       )
 
-      this.setState({
+      setState(pre => ({
+        ...pre,
         JobDetails: updatedData,
         similarJobsList: [...modifiedSimilarJobsData],
         apiStatus: apiStatusConstants.success,
-      })
+      }))
     } else {
-      this.setState({
-        apiStatus: apiStatusConstants.failure,
-      })
+      setState(pre => ({...pre, apiStatus: apiStatusConstants.failure}))
     }
   }
 
-  renderLoadingView = () => (
+  useEffect(() => {
+    getProductData()
+  }, [id])
+
+  const renderLoadingView = () => (
     <div className="job-details-loader-container" data-testid="loader">
       <Loader type="ThreeDots" color="#0b69ff" height="50" width="50" />
     </div>
   )
 
-  onClickJobItemRetry = () => {
-    this.getProductData()
+  const onClickJobItemRetry = () => {
+    getProductData()
   }
 
-  renderFailureView = () => (
+  const renderFailureView = () => (
     <div className="job-details-error-view-container">
       <img
         src="https://assets.ccbp.in/frontend/react-js/failure-img.png"
@@ -111,15 +109,15 @@ class JobItem extends Component {
       <button
         type="button"
         className="job-item-retry-button"
-        onClick={this.onClickJobItemRetry}
+        onClick={onClickJobItemRetry}
       >
         Retry
       </button>
     </div>
   )
 
-  renderSimilarJobs = () => {
-    const {similarJobsList} = this.state
+  const renderSimilarJobs = () => {
+    const {similarJobsList} = state
     return (
       <>
         <div className="similar-jobs-container">
@@ -134,8 +132,8 @@ class JobItem extends Component {
     )
   }
 
-  renderJobDetailsView = () => {
-    const {JobDetails} = this.state
+  const renderJobDetailsView = () => {
+    const {JobDetails} = state
     const {
       companyLogoUrl,
       companyWebsiteUrl,
@@ -216,36 +214,32 @@ class JobItem extends Component {
             </div>
           </div>
         </div>
-        {this.renderSimilarJobs()}
+        {renderSimilarJobs()}
       </>
     )
   }
 
-  renderJobDetails = () => {
-    const {apiStatus} = this.state
+  const renderJobDetails = () => {
+    const {apiStatus} = state
 
     switch (apiStatus) {
       case apiStatusConstants.success:
-        return this.renderJobDetailsView()
+        return renderJobDetailsView()
       case apiStatusConstants.failure:
-        return this.renderFailureView()
+        return renderFailureView()
       case apiStatusConstants.inProgress:
-        return this.renderLoadingView()
+        return renderLoadingView()
       default:
         return null
     }
   }
 
-  render() {
-    return (
-      <>
-        <Header />
-        <div className="job-detail-view-container">
-          {this.renderJobDetails()}
-        </div>
-      </>
-    )
-  }
+  return (
+    <>
+      <Header />
+      <div className="job-detail-view-container">{renderJobDetails()}</div>
+    </>
+  )
 }
 
 export default JobItem

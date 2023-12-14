@@ -1,6 +1,7 @@
 import {AiFillStar} from 'react-icons/ai'
 import {MdLocationOn} from 'react-icons/md'
 import {BsBriefcaseFill} from 'react-icons/bs'
+import {Link} from 'react-router-dom'
 import './SimilarJobItem.css'
 
 const SimilarJobItem = props => {
@@ -12,9 +13,10 @@ const SimilarJobItem = props => {
     location,
     rating,
     title,
+    id,
   } = similarJobDetails
   return (
-    <>
+    <Link to={`/jobs/${id}`} style={{color: '#fff', textDecoration: 'none'}}>
       <li className="similar-job-card">
         <div className="top-container">
           <img
@@ -43,7 +45,7 @@ const SimilarJobItem = props => {
           </div>
         </div>
       </li>
-    </>
+    </Link>
   )
 }
 

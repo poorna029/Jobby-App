@@ -1,6 +1,7 @@
-import {Component} from 'react'
+import {useEffect, useState} from 'react'
 import Loader from 'react-loader-spinner'
 import Cookies from 'js-cookie'
+// import axios from 'axios'
 import {BsSearch} from 'react-icons/bs'
 import Header from '../Header/Header'
 import UserProfile from '../UserProfile/UserProfile'
@@ -53,8 +54,8 @@ const apiStatusConstants = {
   inProgress: 'IN_PROGRESS',
 }
 
-class Jobs extends Component {
-  state = {
+const Jobs = () => {
+  const [state, setState] = useState({
     searchInput: '',
     employmentType: [],
     minimumPackage: '',
@@ -62,19 +63,57 @@ class Jobs extends Component {
     profileDetails: {},
     profileApiStatus: apiStatusConstants.initial,
     jobsList: [],
-  }
+  })
 
-  componentDidMount() {
-    this.getUserDetails()
-    this.getJobs()
-  }
-
-  getJobs = async () => {
-    this.setState({
-      jobsApiStatus: apiStatusConstants.inProgress,
-    })
+  const getUserDetails = async () => {
+    setState(pre => ({...pre, profileApiStatus: apiStatusConstants.inProgress}))
     const jwtToken = Cookies.get('jwt_token')
-    const {searchInput, employmentType, minimumPackage} = this.state
+    const url = 'https://apis.ccbp.in/profile'
+    const options = {
+      headers: {
+        Authorization: `Bearer ${jwtToken}`,
+      },
+      method: 'GET',
+    }
+    try {
+      // const response = await axios.get(url, {
+      //   headers: {
+      //     Authorization: `Bearer ${jwtToken}`,
+      //   },
+      // })
+
+      const response = await fetch(url, options)
+      console.log(response)
+      if (response.ok) {
+        const data = await response.json() /* converted to json(), still getting promise object */
+        const updatedUserProfile = {
+          name: data.profile_details.name,
+          profileImageUrl: data.profile_details.profile_image_url,
+          shortBio: data.profile_details.short_bio,
+        }
+
+        setState(pre => ({
+          ...pre,
+          profileDetails: updatedUserProfile,
+          profileApiStatus: apiStatusConstants.success,
+        }))
+      }
+      // console.log(response.status, response.message)
+      if (!response.ok) {
+        setState(pre => ({
+          ...pre,
+          profileApiStatus: apiStatusConstants.failure,
+        }))
+      }
+    } catch (e) {
+      setState(pre => ({...pre, profileApiStatus: apiStatusConstants.failure}))
+    }
+  }
+
+  const getJobs = async () => {
+    setState(pre => ({...pre, jobsApiStatus: apiStatusConstants.inProgress}))
+    const jwtToken = Cookies.get('jwt_token')
+    const {searchInput, employmentType, minimumPackage} = state
     let minimumPackageSelected = ''
     if (minimumPackage !== '') {
       minimumPackageSelected = parseInt(minimumPackage)
@@ -88,120 +127,97 @@ class Jobs extends Component {
       },
       method: 'GET',
     }
-    const response = await fetch(apiUrl, options)
-    if (response.ok) {
-      const fetchedData = await response.json()
-      const updatedData = fetchedData.jobs.map(job => ({
-        companyLogoUrl: job.company_logo_url,
-        employmentType: job.employment_type,
-        id: job.id,
-        jobDescription: job.job_description,
-        location: job.location,
-        packagePerAnnum: job.package_per_annum,
-        rating: job.rating,
-        title: job.title,
-      }))
-      this.setState({
-        jobsList: updatedData,
-        jobsApiStatus: apiStatusConstants.success,
-      })
-    } else {
-      this.setState({
-        jobsApiStatus: apiStatusConstants.failure,
-      })
-    }
-  }
-
-  getUserDetails = async () => {
-    this.setState({
-      profileApiStatus: apiStatusConstants.inProgress,
-    })
-    const jwtToken = Cookies.get('jwt_token')
-    const url = 'https://apis.ccbp.in/profile'
-    const options = {
-      headers: {
-        Authorization: `Bearer ${jwtToken}`,
-      },
-      method: 'GET',
-    }
-    const response = await fetch(url, options)
-    if (response.ok) {
-      const data = await response.json() /* converted to json(), still getting promise object */
-      const updatedUserProfile = {
-        name: data.profile_details.name,
-        profileImageUrl: data.profile_details.profile_image_url,
-        shortBio: data.profile_details.short_bio,
+    try {
+      const response = await fetch(apiUrl, options)
+      if (response.ok) {
+        const fetchedData = await response.json()
+        const updatedData = fetchedData.jobs.map(job => ({
+          companyLogoUrl: job.company_logo_url,
+          employmentType: job.employment_type,
+          id: job.id,
+          jobDescription: job.job_description,
+          location: job.location,
+          packagePerAnnum: job.package_per_annum,
+          rating: job.rating,
+          title: job.title,
+        }))
+        setState(pre => ({
+          ...pre,
+          jobsList: updatedData,
+          jobsApiStatus: apiStatusConstants.success,
+        }))
+      } else {
+        setState(pre => ({...pre, jobsApiStatus: apiStatusConstants.failure}))
       }
-
-      this.setState({
-        profileDetails: updatedUserProfile,
-        profileApiStatus: apiStatusConstants.success,
-      })
-    } else {
-      this.setState({
-        profileApiStatus: apiStatusConstants.failure,
-      })
+    } catch (e) {
+      setState(pre => ({...pre, jobsApiStatus: apiStatusConstants.failure}))
     }
   }
 
-  renderUserProfile = () => {
-    const {profileDetails} = this.state
+  useEffect(() => {
+    getUserDetails()
+    getJobs()
+  }, [])
+
+  const renderUserProfile = () => {
+    const {profileDetails} = state
+    console.log('newpoorna', profileDetails)
     return (
-      <>
-        <div className="profile-info-container">
-          <UserProfile profileInfo={profileDetails} />
-        </div>
-      </>
+      <div className="profile-info-container">
+        <UserProfile profileInfo={profileDetails} />
+      </div>
     )
   }
 
-  renderFailureProfile = () => (
+  const onClickRetry = () => {
+    getUserDetails()
+  }
+
+  const renderFailureProfile = () => (
     <>
       <div className="retry-container">
-        <button
-          type="button"
-          className="retry-button"
-          onClick={this.onClickRetry}
-        >
+        <button type="button" className="retry-button" onClick={onClickRetry}>
           Retry
         </button>
       </div>
     </>
   )
 
-  renderProfileStatus = () => {
-    const {profileApiStatus} = this.state
+  const renderLoadingView = () => (
+    <div className="products-loader-container" data-testid="loader">
+      <Loader type="ThreeDots" color="#0b69ff" height="50" width="50" />
+    </div>
+  )
+
+  const renderProfileStatus = () => {
+    const {profileApiStatus} = state
 
     switch (profileApiStatus) {
       case apiStatusConstants.success:
-        return this.renderUserProfile()
+        return renderUserProfile()
       case apiStatusConstants.failure:
-        return this.renderFailureProfile()
+        return renderFailureProfile()
       case apiStatusConstants.inProgress:
-        return this.renderLoadingView()
+        return renderLoadingView()
       default:
         return null
     }
   }
 
-  onClickRetry = () => {
-    this.getUserDetails()
+  const onClickJobsRetry = () => {
+    getJobs()
   }
 
-  onClickJobsRetry = () => {
-    this.getJobs()
+  const onChangeSearchInput = event => {
+    setState({searchInput: event.target.value})
   }
 
-  onChangeSearchInput = event => {
-    this.setState({searchInput: event.target.value})
+  const onClickSearch = () => {
+    getJobs()
   }
 
-  onClickSearch = () => {
-    this.getJobs()
-  }
-
-  searchElement = () => {
-    const {searchInput} = this.state
+  const searchElement = () => {
+    const {searchInput} = state
     return (
       <>
         <input
@@ -209,14 +225,14 @@ class Jobs extends Component {
           value={searchInput}
           className="input-search"
           placeholder="Search"
-          onChange={this.onChangeSearchInput}
+          onChange={onChangeSearchInput}
         />
 
         <button
           type="button"
           data-testid="searchButton"
           className="search-button"
-          onClick={this.onClickSearch}
+          onClick={onClickSearch}
         >
           {'   '}
 
@@ -226,7 +242,7 @@ class Jobs extends Component {
     )
   }
 
-  renderFailureView = () => (
+  const renderFailureView = () => (
     <div className="failure-jobs-container">
       <img
         src="https://assets.ccbp.in/frontend/react-js/failure-img.png"
@@ -237,21 +253,15 @@ class Jobs extends Component {
       <button
         type="button"
         className="retry-jobs-button"
-        onClick={this.onClickJobsRetry}
+        onClick={onClickJobsRetry}
       >
         Retry
       </button>
     </div>
   )
 
-  renderLoadingView = () => (
-    <div className="products-loader-container" data-testid="loader">
-      <Loader type="ThreeDots" color="#0b69ff" height="50" width="50" />
-    </div>
-  )
-
-  renderJobsListView = () => {
-    const {jobsList} = this.state
+  const renderJobsListView = () => {
+    const {jobsList} = state
     const shouldShowJobsList = jobsList.length > 0
 
     return shouldShowJobsList ? (
@@ -275,126 +285,120 @@ class Jobs extends Component {
     )
   }
 
-  renderAllJobs = () => {
-    const {jobsApiStatus} = this.state
+  const renderAllJobs = () => {
+    const {jobsApiStatus} = state
 
     switch (jobsApiStatus) {
       case apiStatusConstants.success:
-        return this.renderJobsListView()
+        return renderJobsListView()
       case apiStatusConstants.failure:
-        return this.renderFailureView()
+        return renderFailureView()
       case apiStatusConstants.inProgress:
-        return this.renderLoadingView()
+        return renderLoadingView()
       default:
         return null
     }
   }
 
-  onSelectEmploymentOption = event => {
-    const {employmentType} = this.state
+  const onSelectEmploymentOption = event => {
+    const {employmentType} = state
     if (event.target.checked) {
-      this.setState(
+      setState(
         {
           employmentType: [...employmentType, event.target.value],
         },
-        this.getJobs,
+        getJobs,
       )
     } else {
       const updatedEmploymentTypes = employmentType.filter(
         eachItem => eachItem !== event.target.value,
       )
-      this.setState({employmentType: updatedEmploymentTypes}, this.getJobs)
+      setState({employmentType: updatedEmploymentTypes}, getJobs)
     }
   }
 
-  onSalaryRangeClick = event => {
-    const {minimumPackage} = this.state
+  const onSalaryRangeClick = event => {
+    const {minimumPackage} = state
     const target = event.currentTarget
     if (target.checked && minimumPackage === target.value) {
       target.checked = false
       target.click()
-      this.setState({minimumPackage: ''}, this.getJobs)
+      setState({minimumPackage: ''}, getJobs)
     }
   }
 
-  onSalaryRangeChange = event => {
-    const {minimumPackage} = this.state
+  const onSalaryRangeChange = event => {
+    const {minimumPackage} = state
     if (minimumPackage !== event.target.value) {
-      this.setState({minimumPackage: event.target.value}, this.getJobs)
+      setState({minimumPackage: event.target.value}, getJobs)
     }
   }
 
-  render() {
-    return (
-      <>
-        <Header />
-        <div className="jobs-container">
-          <div className="profile-sort-container">
-            <div className="search-container mobile-search">
-              {this.searchElement()}
-            </div>
-            <div className="profile-container">
-              {this.renderProfileStatus()}
-            </div>
-            <hr className="h-line" />
-            <div className="filter-container">
-              <h1 className="filter-heading">Type of Employment</h1>
-              <ul className="employment-filter">
-                {employmentTypesList.map(eachType => (
-                  <li className="filter-item">
-                    <input
-                      type="checkbox"
-                      id={eachType.employmentTypeId}
-                      className="employment-checkbox"
-                      value={eachType.employmentTypeId}
-                      onChange={this.onSelectEmploymentOption}
-                    />
-                    <label
-                      htmlFor={eachType.employmentTypeId}
-                      className="employment-label"
-                    >
-                      {eachType.label}
-                    </label>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <hr className="h-line" />
-            <div className="filter-container">
-              <h1 className="filter-heading">Salary Range</h1>
-              <ul className="employment-filter">
-                {salaryRangesList.map(eachType => (
-                  <li className="filter-item">
-                    <input
-                      type="radio"
-                      id={eachType.salaryRangeId}
-                      value={eachType.salaryRangeId}
-                      name={eachType.salaryRangeId}
-                      className="salary-checkbox"
-                      onClick={this.onSalaryRangeClick}
-                      onChange={this.onSalaryRangeChange}
-                    />
-                    <label
-                      htmlFor={eachType.salaryRangeId}
-                      className="employment-label"
-                    >
-                      {eachType.label}
-                    </label>
-                  </li>
-                ))}
-              </ul>
-            </div>
+  return (
+    <>
+      <Header />
+      <div className="jobs-container">
+        <div className="profile-sort-container">
+          <div className="search-container mobile-search">
+            {searchElement()}
           </div>
-          <div className="jobs">
-            <div className="search-container md-search">
-              {this.searchElement()}
-            </div>
-            {this.renderAllJobs()}
+          <div className="profile-container">{renderProfileStatus()}</div>
+          <hr className="h-line" />
+          <div className="filter-container">
+            <h1 className="filter-heading">Type of Employment</h1>
+            <ul className="employment-filter">
+              {employmentTypesList.map(eachType => (
+                <li className="filter-item">
+                  <input
+                    type="checkbox"
+                    id={eachType.employmentTypeId}
+                    className="employment-checkbox"
+                    value={eachType.employmentTypeId}
+                    onChange={onSelectEmploymentOption}
+                  />
+                  <label
+                    htmlFor={eachType.employmentTypeId}
+                    className="employment-label"
+                  >
+                    {eachType.label}
+                  </label>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <hr className="h-line" />
+          <div className="filter-container">
+            <h1 className="filter-heading">Salary Range</h1>
+            <ul className="employment-filter">
+              {salaryRangesList.map(eachType => (
+                <li className="filter-item">
+                  <input
+                    type="radio"
+                    id={eachType.salaryRangeId}
+                    value={eachType.salaryRangeId}
+                    name={eachType.salaryRangeId}
+                    className="salary-checkbox"
+                    onClick={onSalaryRangeClick}
+                    onChange={onSalaryRangeChange}
+                  />
+                  <label
+                    htmlFor={eachType.salaryRangeId}
+                    className="employment-label"
+                  >
+                    {eachType.label}
+                  </label>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
-      </>
-    )
-  }
+        <div className="jobs">
+          <div className="search-container md-search">{searchElement()}</div>
+          {renderAllJobs()}
+        </div>
+      </div>
+    </>
+  )
 }
 
 export default Jobs
