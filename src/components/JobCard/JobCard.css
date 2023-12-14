@@ -1,0 +1,92 @@
+.job-card {
+  width: 100% !important;
+  display: flex;
+  flex-direction: column;
+  background-color: #272727;
+  padding: 14px;
+  color: #ffffff;
+  border-radius: 10px;
+  font-family: 'Roboto';
+  margin-bottom: 20px;
+  margin-right: 0px !important;
+}
+
+.top-container {
+  display: flex;
+  align-items: center;
+}
+
+.info-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.location-type-container {
+  display: flex;
+  align-items: center;
+  padding-left: 0px;
+}
+
+.rating-container {
+  display: flex;
+  align-items: center;
+}
+
+.location-container {
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+}
+
+.job-type-container {
+  display: flex;
+  align-items: center;
+}
+
+.location {
+  margin-left: 5px;
+}
+
+.employment-type {
+  margin-left: 5px;
+}
+
+.company-logo {
+  width: 60px;
+  margin-right: 14px;
+}
+
+.title {
+  font-size: 22px;
+  margin-top: 5px;
+}
+
+.star-icon {
+  margin-right: 5px;
+  font-size: 20px;
+  color: #fbbf24;
+}
+
+.description-heading {
+  margin-top: 4px;
+  margin-bottom: 6px;
+  font-size: 18px;
+}
+
+.description {
+  margin-top: 4px;
+  margin-bottom: 0px;
+  font-size: 14px;
+}
+
+.job-link {
+  text-decoration: none;
+  width: 100%;
+}
+
+@media screen and (min-width: 768px) {
+  .company-logo {
+    width: 80px;
+  }
+}
